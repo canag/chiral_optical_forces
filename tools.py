@@ -173,7 +173,7 @@ def plot_vectorfield_zx(A, x, y, z, q='real'):
     elif q=='imag':
         Mx = np.imag(A[0, :, ind_med, :])
         My = np.imag(A[1, :, ind_med, :])
-        Me = np.imag(A[2, :, ind_med, :])
+        Mz = np.imag(A[2, :, ind_med, :])
     elif q=='abs':
         Mx = np.abs(A[0, :, ind_med, :])
         My = np.abs(A[1, :, ind_med, :])
