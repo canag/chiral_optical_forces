@@ -26,40 +26,43 @@ def define_3Dgrid(grid_range=10, grid_step = 0.1):
 
 # define a planar wave going in the z direction
 
-def define_planar_wave(x, y, z, pol='X'):
+def define_planar_wave(x, y, z, pol='X', dir=1):
     '''
     function that returns the adimensional E and H fields
-    for a planar wave going in the +z direction 
+    for a planar wave going in the dir*z direction 
     with a specific polarization 
     '''
 
+    # term in the exponential
+    t = 1j * dir * z
+
     if pol=='X':
-        Ex = np.exp(1j * z)
+        Ex = np.exp(t)
         Ey = 0 * x
         Ez = 0 * x
         Hx = 0 * x
-        Hy = np.exp(1j * z)
+        Hy = dir * np.exp(t)
         Hz = 0 * x
     elif pol=='Y':
         Ex = 0 * x
-        Ey = np.exp(1j * z)
+        Ey = np.exp(t)
         Ez = 0 * x
-        Hx = - np.exp(1j * z)
+        Hx = - dir * np.exp(t)
         Hy = 0 * x
         Hz = 0 * x
     elif pol=='L':
-        Ex = np.exp(1j * z) / np.sqrt(2)
-        Ey = - 1j * np.exp(1j * z) / np.sqrt(2)
+        Ex = np.exp(t) / np.sqrt(2)
+        Ey = - dir * 1j * np.exp(t) / np.sqrt(2)
         Ez = 0 * x
-        Hx = 1j * np.exp(1j * z) / np.sqrt(2)
-        Hy = np.exp(1j * z) / np.sqrt(2)
+        Hx = 1j * np.exp(t) / np.sqrt(2)
+        Hy = dir * np.exp(t) / np.sqrt(2)
         Hz = 0 * x
     elif pol=='R':
-        Ex = np.exp(1j * z) / np.sqrt(2)
-        Ey = 1j * np.exp(1j * z) / np.sqrt(2)
+        Ex = np.exp(t) / np.sqrt(2)
+        Ey = dir * 1j * np.exp(t) / np.sqrt(2)
         Ez = 0 * x
-        Hx = -1j * np.exp(1j * z) / np.sqrt(2)
-        Hy = np.exp(1j * z) / np.sqrt(2)
+        Hx = -1j * np.exp(t) / np.sqrt(2)
+        Hy = dir * np.exp(t) / np.sqrt(2)
         Hz = 0 * x
     else:
         print("Issue: polarization must be among X, Y, L, R.")
@@ -68,6 +71,22 @@ def define_planar_wave(x, y, z, pol='X'):
     H = np.stack([Hx, Hy, Hz])
     print("E and H have shape", E.shape)
     return E, H 
+
+
+def define_planar_counterwaves(x, y, z, pol='XX'):
+    '''
+    function that returns the adimensional E and H fields
+    for a planar wave going in the +z direction 
+    with a specific polarization 
+    '''
+
+    E1, H1 = define_planar_wave(x, y, z, pol=pol[0], dir=1)
+    E2, H2 = define_planar_wave(x, y, z, pol=pol[1], dir=-1)
+
+    E = E1 + E2
+    H = H1 + H2
+    print("E and H have shape", E.shape)
+    return E, H
 
 
 # low-level tool functions
