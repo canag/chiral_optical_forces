@@ -200,7 +200,7 @@ def plot_vectorfield_zx(A, x, y, z, q='real'):
     pass
 
 
-def plot_scalarfield_zx(A, x, y, z):
+def plot_scalarfield_zx(A, x, y, z, q='real'):
     '''
     function that plots (z, x) maps for the real parts of 
     a scalar field in the (y=0)-plane
@@ -215,7 +215,15 @@ def plot_scalarfield_zx(A, x, y, z):
 
     _, ax = plt.subplots(figsize=(5, 3))
 
-    M = np.real(A[:, ind_med, :])
+    if q=='real':
+        M = np.real(A[:, ind_med, :])
+    elif q=='imag':
+        M = np.imag(A[:, ind_med, :])
+    elif q=='abs':
+        M = np.abs(A[:, ind_med, :])
+    else:
+        print("Issue: q must be among ['real', 'imag', 'abs']")
+    
     plt.imshow(M, cmap='bwr', vmin=-np.max(abs(M)), vmax=np.max(abs(M)),
                interpolation='spline16', extent=[x.min(), x.max(), z.min(), z.max()])
     plt.colorbar()
