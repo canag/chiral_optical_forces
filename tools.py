@@ -150,7 +150,7 @@ def curl(A, grid_step):
     return curl
    
 
-def plot_vectorfield_zx(A, x, y, z):
+def plot_vectorfield_zx(A, x, y, z, q='real'):
     '''
     function that plots (z, x) maps for the real parts of 
     the 3 components of a vector field int the (y=0)-plane
@@ -166,18 +166,30 @@ def plot_vectorfield_zx(A, x, y, z):
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(15, 3))
     mycmap = 'bwr'
 
-    M = np.real(A[0, :, ind_med, :])
-    pcm = axs[0].imshow(M, cmap=mycmap, vmin=-np.max(abs(M)), vmax=np.max(abs(M)),
+    if q=='real':
+        Mx = np.real(A[0, :, ind_med, :])
+        My = np.real(A[1, :, ind_med, :])
+        Mz = np.real(A[2, :, ind_med, :])
+    elif q=='imag':
+        Mx = np.imag(A[0, :, ind_med, :])
+        My = np.imag(A[1, :, ind_med, :])
+        Me = np.imag(A[2, :, ind_med, :])
+    elif q=='abs':
+        Mx = np.abs(A[0, :, ind_med, :])
+        My = np.abs(A[1, :, ind_med, :])
+        Mz = np.abs(A[2, :, ind_med, :])
+    else:
+        print("Issue: q must be among ['real', 'imag', 'abs']")
+
+    pcm = axs[0].imshow(Mx, cmap=mycmap, vmin=-np.max(abs(Mx)), vmax=np.max(abs(Mx)),
                         interpolation='spline16', extent=[x.min(), x.max(), z.min(), z.max()])
     fig.colorbar(pcm, ax=axs[0])
 
-    M = np.real(A[1, :, ind_med, :])
-    pcm = axs[1].imshow(M, cmap=mycmap, vmin=-np.max(abs(M)), vmax=np.max(abs(M)),
+    pcm = axs[1].imshow(My, cmap=mycmap, vmin=-np.max(abs(My)), vmax=np.max(abs(My)),
                         interpolation='spline16', extent=[x.min(), x.max(), z.min(), z.max()])
     fig.colorbar(pcm, ax=axs[1])
 
-    M = np.real(A[2, :, ind_med, :])
-    pcm = axs[2].imshow(M, cmap=mycmap, vmin=-np.max(abs(M)), vmax=np.max(abs(M)),
+    pcm = axs[2].imshow(Mz, cmap=mycmap, vmin=-np.max(abs(Mz)), vmax=np.max(abs(Mz)),
                         interpolation='spline16', extent=[x.min(), x.max(), z.min(), z.max()])
     fig.colorbar(pcm, ax=axs[2])
 
