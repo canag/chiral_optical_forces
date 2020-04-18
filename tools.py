@@ -214,7 +214,23 @@ def curl(A, grid_step):
     curl[1,:,:,:] = J[2,0,:,:,:] - J[0,2,:,:,:]
     curl[2,:,:,:] = J[0,1,:,:,:] - J[1,0,:,:,:]
     return curl
-   
+
+
+def div(A, grid_step):
+    '''
+    function that computes the map of div of vector field A
+    A must have shape (3, Nx, Ny, Nz)
+    Returns a vector field map of shape (Nx, Ny, Nz)
+    '''
+    if (A.ndim!=4)|(A.shape[0]!=3):
+        print("Issue: first input must have shape (3, Nx, Ny, Nz).")
+    
+    Ax = np.gradient(A[0,:,:,:], axis=0) / grid_step
+    Ay = np.gradient(A[1,:,:,:], axis=1) / grid_step
+    Az = np.gradient(A[2,:,:,:], axis=2) / grid_step
+    print(Ax.shape)
+    return Ax+Ay+Az
+
 
 def plot_vectorfield_zx(A, x, y, z, q='real'):
     '''
