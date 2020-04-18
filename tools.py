@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 
 # define a 3D grid
 
-def define_3Dgrid(grid_range=10, grid_step = 0.1):
+def define_3Dgrid(grid_range=[10, 10, 10], grid_step = 0.1):
     '''
     function that defines the grid for the 3D maps
     x, y and z all have shape (Nx, Ny, Nz) 
     '''
 
-    x, y, z = np.meshgrid(np.arange(-grid_range/2, grid_range/2, grid_step),
-                          np.arange(-grid_range/2, grid_range/2, grid_step),
-                          np.arange(-grid_range/2, grid_range/2, grid_step),
+    x, y, z = np.meshgrid(np.arange(-grid_range[0]/2, grid_range[0]/2, grid_step),
+                          np.arange(-grid_range[1]/2, grid_range[1]/2, grid_step),
+                          np.arange(-grid_range[2]/2, grid_range[2]/2, grid_step),
                           indexing='ij')
 
     print("Maps of size (Nx, Ny, Nz) =", x.shape)
