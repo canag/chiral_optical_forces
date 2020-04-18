@@ -24,7 +24,7 @@ def define_3Dgrid(grid_range=[10, 10, 10], grid_step = 0.1):
     return x, y, z
 
 
-# define a planar wave going in the z direction
+# define a planar wave going in the +/-z direction
 
 def define_planar_wave(x, y, z, pol='X', dir=1):
     '''
@@ -87,6 +87,60 @@ def define_planar_counterwaves(x, y, z, pol='XX'):
     H = H1 + H2
     print("E and H have shape", E.shape)
     return E, H
+
+
+# define a Gaussian (paraxial) beam going in the +/-z direction
+
+def define_gaussian_beam(x, y, z, NA, n, grid_step, pol='X', dir=1):
+    '''
+    function that returns the adimensional E and H fields
+    for a Gaussian beam going in the dir*z direction 
+    with a specific polarization 
+    '''
+
+    # distance to z-axis (first cylinder coordinate)
+    rho = np.sqrt(x**2 + y**2)
+
+    # amplitude of the E field
+    w0 =  2 * np.pi * n 
+    zR = w0**2 / n
+
+    w = w0 * np.sqrt(1 + (z/zR)**2)
+    R = z * (1 + (zR/z)**2)
+
+    zeta = np.arctan(z/zR)
+    phi = z + rho**2/(2*R) - zeta
+
+    f = w0/w * np.exp(-(rho/w)**2) * np.exp(1j*phi)
+
+    Ex = f
+    Ey = 0 * x
+    Ez = 0 * x
+    E = np.stack([Ex, Ey, Ez])
+
+    if pol=='X':
+        Ex = f
+        Ey = 0 * x
+        Ez = 0 * x
+    elif pol=='Y':
+        Ex = 0 * x
+        Ey = f
+        Ez = 0 * x
+    elif pol=='L':
+        Ex = f / np.sqrt(2)
+        Ey = - 1j * f / np.sqrt(2)
+        Ez = 0 * x
+    elif pol=='R':
+        Ex = f / np.sqrt(2)
+        Ey = 1j * f / np.sqrt(2)
+        Ez = 0 * x
+    else:
+        print("Issue: polarization must be among X, Y, L, R.")
+
+    E = np.stack([Ex, Ey, Ez])
+    H = -1j * curl(E, grid_step)
+    print("E and H have shape", E.shape, H.shape)
+    return E, H 
 
 
 # low-level tool functions
