@@ -182,15 +182,18 @@ def plot_vectorfield_zx(A, x, y, z, q='real'):
         print("Issue: q must be among ['real', 'imag', 'abs']")
 
     pcm = axs[0].imshow(Mx, cmap=mycmap, vmin=-np.max(abs(Mx)), vmax=np.max(abs(Mx)),
-                        interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()])
+                        interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()],
+                        origin='lower')
     fig.colorbar(pcm, ax=axs[0])
 
     pcm = axs[1].imshow(My, cmap=mycmap, vmin=-np.max(abs(My)), vmax=np.max(abs(My)),
-                        interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()])
+                        interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()],
+                        origin='lower')
     fig.colorbar(pcm, ax=axs[1])
 
     pcm = axs[2].imshow(Mz, cmap=mycmap, vmin=-np.max(abs(Mz)), vmax=np.max(abs(Mz)),
-                        interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()])
+                        interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()],
+                        origin='lower')
     fig.colorbar(pcm, ax=axs[2])
 
     axs[0].set(xlabel='kz', ylabel='kx')
@@ -225,7 +228,8 @@ def plot_scalarfield_zx(A, x, y, z, q='real'):
         print("Issue: q must be among ['real', 'imag', 'abs']")
     
     plt.imshow(M, cmap='bwr', vmin=-np.max(abs(M)), vmax=np.max(abs(M)),
-               interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()])
+               interpolation='spline16', extent=[z.min(), z.max(), x.min(), x.max()],
+               origin='lower')
     plt.colorbar()
     ax.set(xlabel='kz', ylabel='kx')
     plt.show()
