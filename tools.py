@@ -155,6 +155,45 @@ def define_gaussian_counterwaves(x, y, z, NA, n, grid_step, pol='XX'):
     return E, H
 
 
+# define a Gaussian beam going in the +/-z direction
+# beyond the paraxial approximation (Torok's paper)
+
+def define_torok_beam(x, y, z, NA, n, grid_step, dir=1):
+    '''
+    function that returns the adimensional E and H fields
+    for a "Torok" beam going in the dir*z direction 
+    with a specific polarization 
+    '''
+
+    # distance to z-axis (first cylinder coordinate)
+    rho = np.sqrt(x**2 + y**2)
+
+    # amplitude of the E field
+    w0 =  2 * np.pi * n 
+    zR = w0**2 / (2*n)
+
+    w = w0 * np.sqrt(1 + (z/zR)**2)
+    R = dir * z * (1 + (zR/z)**2)
+
+    zeta = dir * np.arctan(z/zR)
+    phi = dir * z + rho**2/(2*R) - zeta
+
+    f = w0/w * np.exp(-(rho/w)**2) * np.exp(1j*phi)
+    
+    # additional terms
+    E0 = w0/w * np.exp(-(rho/w)**2)
+    q = z - 1j*zR
+
+    Ex = f + (1j/q - (x/q)**2)*E0
+    Ey = - (x*y / q**2)*E0
+    Ez = x/q * ((x**2 + y**2)/(2*q**2) - 1) * E0
+
+    E = np.stack([Ex, Ey, Ez])
+    H = -1j * curl(E, grid_step)
+    print("E and H have shape", E.shape, H.shape)
+    return E, H 
+
+
 # low-level tool functions
 
 
