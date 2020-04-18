@@ -69,15 +69,15 @@ def define_planar_wave(x, y, z, pol='X', dir=1):
 
     E = np.stack([Ex, Ey, Ez])
     H = np.stack([Hx, Hy, Hz])
-    print("E and H have shape", E.shape)
+    print("E and H have shape", E.shape, H.shape)
     return E, H 
 
 
 def define_planar_counterwaves(x, y, z, pol='XX'):
     '''
     function that returns the adimensional E and H fields
-    for a planar wave going in the +z direction 
-    with a specific polarization 
+    for two counter propagating planar waves going in the z direction 
+    with specified polarizations 
     '''
 
     E1, H1 = define_planar_wave(x, y, z, pol=pol[0], dir=1)
@@ -85,7 +85,7 @@ def define_planar_counterwaves(x, y, z, pol='XX'):
 
     E = E1 + E2
     H = H1 + H2
-    print("E and H have shape", E.shape)
+    print("E and H have shape", E.shape, H.shape)
     return E, H
 
 
@@ -137,6 +137,22 @@ def define_gaussian_beam(x, y, z, NA, n, grid_step, pol='X', dir=1):
     H = -1j * curl(E, grid_step)
     print("E and H have shape", E.shape, H.shape)
     return E, H 
+
+
+def define_gaussian_counterwaves(x, y, z, NA, n, grid_step, pol='XX'):
+    '''
+    function that returns the adimensional E and H fields
+    for counter propagating gaussian waves (in the paraxial limit)
+    going in the z direction with specified polarizations 
+    '''
+
+    E1, H1 = define_gaussian_beam(x, y, z, NA, n, grid_step, pol=pol[0], dir=1)
+    E2, H2 = define_gaussian_beam(x, y, z, NA, n, grid_step, pol=pol[1], dir=-1)
+
+    E = E1 + E2
+    H = H1 + H2
+    print("E and H have shape", E.shape, H.shape)
+    return E, H
 
 
 # low-level tool functions
