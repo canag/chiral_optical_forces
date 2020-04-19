@@ -102,8 +102,8 @@ def define_gaussian_beam(x, y, z, NA, n, grid_step, pol='X', dir=1):
     rho = np.sqrt(x**2 + y**2)
 
     # amplitude of the E field
-    w0 =  2 * np.pi * n 
-    zR = w0**2 / (2*n)
+    w0 =  2 * n / NA 
+    zR = w0**2 / 2
 
     w = w0 * np.sqrt(1 + (z/zR)**2)
     R = dir * z * (1 + (zR/z)**2)
@@ -169,8 +169,8 @@ def define_torok_beam(x, y, z, NA, n, grid_step, dir=1):
     rho = np.sqrt(x**2 + y**2)
 
     # amplitude of the E field
-    w0 =  2 * np.pi * n 
-    zR = w0**2 / (2*n)
+    w0 =  2 * n / NA 
+    zR = w0**2 / 2
 
     w = w0 * np.sqrt(1 + (z/zR)**2)
     R = dir * z * (1 + (zR/z)**2)
